@@ -11,9 +11,11 @@
 - Tokenize단계
     - Nomalizer
     - Regex tokenizer
+    - Spacing correct
     - L-Tokenizer / MaxScoreTokenizer / KoNLPy
 
 ### 명사추출
+Sequence Labeling
 - HMM(Hidden Markov Model)
 - MEMM(Maximum Entropy Markov Model)
 - Conditional Random Field(CRF) 
