@@ -17,3 +17,17 @@
 - HMM(Hidden Markov Model)
 - MEMM(Maximum Entropy Markov Model)
 - Conditional Random Field(CRF) 
+
+
+## 2. 한국어 띄어쓰기/오탈자 교정
+### 오탈자 제거(String distance)
+- Levenshteion(Edit) distance
+- Jaccard
+- Cosine
+
+## 3. 문서 분류
+- Logistic Regression(Softmax Regression)
+- Reural Networks
+- Regularization(Lasso, Ridge)
+    - L2 regularization은 lambda가 작아짐에 따라(=beta/max(beta)가 커짐에 따라) 많은 beta들이 동시에 커짐
+    - L1 regularization은 lambda가 작아짐에 따라 변수를 추가적으로 이용함
