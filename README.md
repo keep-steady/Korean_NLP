@@ -11,7 +11,7 @@
 - Tokenize단계
     - Nomalizer
     - Regex tokenizer
-    - Spacing correct
+    - Spacing correct(count base)
     - L-Tokenizer / MaxScoreTokenizer / KoNLPy
 
 ### 명사추출
