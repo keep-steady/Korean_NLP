@@ -33,3 +33,20 @@ Sequence Labeling
 - Regularization(Lasso, Ridge)
     - L2 regularization은 lambda가 작아짐에 따라(=beta/max(beta)가 커짐에 따라) 많은 beta들이 동시에 커짐
     - L1 regularization은 lambda가 작아짐에 따라 변수를 추가적으로 이용함
+
+
+## 4. 단어/문서 임베딩
+Embedding : 어떤 정보를 보존하며 저차원의 dense vector로 학습하는가
+ - Word2Vec, Doc2Vec
+ - Glove
+ - Fasttext
+
+
+Embedding : 어떤 정보를 보존하며 저차원의 dense vector로 학습하는가
+ - Word2Vec : 단어 주변에 등장하는 다른 단어들의 분포의 유사성을 보존하는 벡터 표현법
+    - CBOW : 주위 단어로 현재 단어 w(t)를 예측하는 모델
+    - Skipgram : 현재 단어 w(t)로 주위 단어 모두를 예측하는 모델
+    - |v| class Softmax regression을 사용하여 각 단어의 벡터를 학습시키는 classifier
+ - Doc2Vec
+ - Glove
+ - Fasttext
