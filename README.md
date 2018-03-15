@@ -48,6 +48,7 @@ Embedding : 어떤 정보를 보존하며 저차원의 dense vector로 학습하
  
 ## 5. 문서 군집화
 unsupervised Learning. Similarity정의가 핵심
+비교사학습 복습
  - (spherical) K-Means
     - K-Means : 
     - spherikal K-Means : Euclidean이 아닌 Cosine distance
@@ -64,7 +65,7 @@ unsupervised Learning. Similarity정의가 핵심
         - 데이터의 분포를 잘 설명할 수 있는 k개의 Gaussian distribution parameter(mu, sigma)를 학습
         - Dirichlet process를 이용하여 가장 적절한 군집의 갯수(Gaussian Model의 갯수)를 함께 학습함. 군집갯수X
 - Hierarachical clustering
-    - 유사도 : n개의 데이터 X에 대하여 두 데이터 x_1, x_2간에 정의되는 임의의 거리 d(x_1, x_2)
+    - 유사도 : n개의 데이터 X에 대하여 두 데이터 x_i, x_j간에 정의되는 임의의 거리 d(x_1, x_2)
         - 그룹 간의 거리는 d(C_i, C_j)를 기반으로 정의(min, max, average 등..)
         - 하나의 그룹 C_i는 1개 이상의 데이터로 이뤄짐
         - single linkage
@@ -75,4 +76,25 @@ unsupervised Learning. Similarity정의가 핵심
     - 고차원 벡터에서 잘 작동하지 않음
         - 고차원에서는 최근접이웃들의 거리 외에는 정보력이 없음
         - Complete linkage를 이용할 경우, 군집 안에 포함된 모든 점들간의 거리의 평균을 두 군집 간의 거리로 이용. 대부분 점들의 거리가 멀 경우, 군집간 거리가 잘 정의되지 않음
-- DBSCAN
+    - Cluster ensemble에서 hierachical clustering을 활용하는 이유
+        - 고차원에서는 유클리드/코사인을 이용하여 점과 점 사이의 거리(혹은 유사도)를 정의하기 어려움
+        - Clustering Ensemble은 여러 번의 클러스터링 결과를 이용하여 점과 점 사이의 유사도를 잘 정의하였기 때문에 hierachical clustering이 가능
+- DBSCAN(Density-Based Spatial Clustering of Application with Noise)
+    - 모든 점이 반드시 그룹에 속하지 않는다고 가정(노이즈)
+    - 유사도 : n개의 데이터 X에 대하여 두 데이터 x_i, x_j간에 정의되는 임의의 거리 d(x_i, x_j)
+    - 그룹화 방식 : Threshold 이상의 밀도를 지닌 점들을 모두 이어나가는 방식
+- Community Detection
+    - K-Means, DBSCAN은 벡터로 표현된 데이터를 군집화하는 방법이지만, 그래프로 표현된 데이터에서의 군집화 방법
+    
+### 군집화
+- K-means는 centroid를 중심으로 구형의 군집을 만듦
+    - 유클리드의 구형은 공간에 구를 생성, 코싸인의 구형은 각도를 파티셔닝
+- Hierachical clustering, DBSCAN은 임의의 모양의 군집을 추출하기 위한 방법
+    - Sparse vector로 이뤄진 문서 공간은 복잡한 모양이 아님
+    - 데이터가 복잡한 모양이 아니라는 가정을 할 수 있다면 단순한 알고리즘이 좋음
+    
+### 문서 군집화
+- 문서를 BOW형식으로 표현할 경우 일반적인 군집화와 다른 특징을 지님
+- 고차원 벡터에서는 매우 가까운 거리만 의미를 지님
+    - 고차원 벡터의 경우는 큰 k로 군집을 수행한 뒤, 동일한 의미를 지니는 군집들을 하나로 묶는 후처리(post-processing)이 필요
+- Term vector에서 불필요한 단어들을 제거하는 것은 군집화 알고리즘에 도움됨
