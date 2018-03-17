@@ -47,8 +47,9 @@ Embedding : 어떤 정보를 보존하며 저차원의 dense vector로 학습하
  
  
 ## 5. 문서 군집화
-unsupervised Learning. Similarity정의가 핵심
-비교사학습 복습
+unsupervised Learning. Similarity정의가 핵심<br/>
+
+**비교사학습 복습**
  - (spherical) K-Means
     - K-Means : 
     - spherikal K-Means : Euclidean이 아닌 Cosine distance
@@ -83,7 +84,10 @@ unsupervised Learning. Similarity정의가 핵심
     - 모든 점이 반드시 그룹에 속하지 않는다고 가정(노이즈)
     - 유사도 : n개의 데이터 X에 대하여 두 데이터 x_i, x_j간에 정의되는 임의의 거리 d(x_i, x_j)
     - 그룹화 방식 : Threshold 이상의 밀도를 지닌 점들을 모두 이어나가는 방식
-- Community Detection
+    - Parameters에 따라 결과가 민감하게 작동
+        - 군집을 결정하는 밀도값 threshold에 의하여 데이터에서의 노이즈 비율이 예민하게 변경
+    - 높은 계산 비용
+- Graph(Community Detection)
     - K-Means, DBSCAN은 벡터로 표현된 데이터를 군집화하는 방법이지만, 그래프로 표현된 데이터에서의 군집화 방법
     
 ### 군집화
@@ -96,5 +100,43 @@ unsupervised Learning. Similarity정의가 핵심
 ### 문서 군집화
 - 문서를 BOW형식으로 표현할 경우 일반적인 군집화와 다른 특징을 지님
 - 고차원 벡터에서는 매우 가까운 거리만 의미를 지님
+    - 차원이 커질수록 거리가 1이라는 의미를 파악하기 어려움(거리가 1인 점들이 많아짐)
     - 고차원 벡터의 경우는 큰 k로 군집을 수행한 뒤, 동일한 의미를 지니는 군집들을 하나로 묶는 후처리(post-processing)이 필요
 - Term vector에서 불필요한 단어들을 제거하는 것은 군집화 알고리즘에 도움됨
+
+
+## 6. 벡터 인덱싱
+### k-Nearest Neighbor<br/>
+K-NN으로 다시 돌아옴. 가장 단순하고 직관적임. representation만 제대로 된다면 성능이 충분히 보장되는 알고리즘
+ - Representation Learning : fc의 Softmax 등
+ - 머신러닝의 핵심으로 돌아감. 좋은 representation?? 
+    - Interpretablility : 벡터값으로부터 의미를 잘 이해할 수 있는지?, 시각화를 하였을 때 직관적 해석이 가능한가?
+    - Discriminative power : 
+        - (Classification) : 클래스별로 linear separable한가?
+        - (Clustering, k-NN) : MECE한가? 비슷한 데이터는 유사도가 높고, 비슷하지 않은 데이터는 유사도가 낮으며, 이들의 차이는 명확히 구분되는지?
+ - Nearest Neighbor Search -> Hashing으로 정리(Locally Sensitive Hashing:LSH)
+ 
+### Locally Sensitive Hashing
+- RP : https://en.wikipedia.org/wiki/Random_projection
+- LSH(h_ij -> 유클리디언, 코싸인)
+    - 고차원 벡터를 벡터간 거리를 보존하면서 저차원 벡터로 변환
+    - RP에 의한 저차원 벡터를 integer로 바꾸면 각 벡터별로 integer vector형태의 label(hash code)를 만듬
+    - Query가 들어오면, 동일한 RP mapper M을 곱하고, 그 결과를 integer vector로 만듦. 같은 integer vector를 지나는 벡터들만 실제 거리 계산
+        - N개의 전체 데이터가 아닌 같은 hash code를 지니는 데이터만 거리를 계산
+        - 같은 hash code를 지니는 데이터의 개수가 k보다 작을 경우, 비슷한 hash code를 지니는 데이터도 거리를 구할 수 있음
+    - 한 개의 random projection에 의한 1차원 integer vector가 만드는 bucket은 한 종류의 평행한 선들에 의하여 구분되는 공간(기하학적 해석)
+    - 두 개의 random projection에 의한 2차원 integer vector가 만드는 bucket은 두 종류의 평행한 선들에 의하여 구분되는 공간
+    - Hash code의 길이가 길어질수록 bucket의 기하학적 모양은 구에 가까워지며, 구는 수학적으로 k-nearest neighbor search에 최적의 형태
+    - r은 평행한 선분 간의 거리로, bucket안에 들어갈 점의 개수에 영향을 주며, 실제로 LSH를 이용할 때 가장 민감한 파라미터
+    - 실제 LSH를 이용할 때는 하나의 g=(h_1, ..., h_m)가 아닌 여러 개의 g_j=(h_1,...,h_m)를 겹쳐서 사용
+        - 하나의 g를 이용하면 nearest neighbor search의 성능이 매우 낮지만, 여러 장을 이용하면 어느 정도의 성능이 높음
+        - 한 개의 g_1=(h_1,...,h_m)를 이용할 경우, bucket의 모서리에 query가 떨어지는 경우에 문제가 발생
+        - 다른 g_2=(h_1,...,h_m)에 의해 생성된 bucket은 다른 데이터들을 포함할 수 있음. 두 개를 사용하면 조금더 정확한 search space
+    
+- Network based Indexer
+    - LSH는 bucket안의 데이터 밀도가 다를 때 잘 대처를 하지 못하기 때문에 query point에 따라서 neighbor search정확도 및 검색 속도가 차이가 날 수 있음
+    - Network based Indexer들은 query point에 관계없이 성능과 속도가 균일한 특성이 존재
+    - small world phenomenon애 기반하기 때문에 균일한 속도가 나옴
+- Inverted Indexer
+
+ 
