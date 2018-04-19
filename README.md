@@ -141,4 +141,7 @@ K-NN으로 다시 돌아옴. 가장 단순하고 직관적임. representation만
 
  
 
-### Neural_Network(pytorch)
+### Neural_Network(pytorch, Tensorflow)
+- ANN
+- LSTM
+- GRU
